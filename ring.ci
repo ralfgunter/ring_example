@@ -1,0 +1,26 @@
+mainmodule ring {
+    readonly CProxy_Main mainProxy;
+    readonly int numSlices;
+    readonly int maxNumParticlesPerSlice;
+    readonly double sliceLength;
+    readonly double speedLimit;
+    readonly double timestep;
+
+    message ForceMsg {
+        Particle particles_[];
+        double forces_[];
+    };
+
+    mainchare Main {
+        entry Main(CkArgMsg *m);
+        entry [reductiontarget] void cycleDone(double maxChange);
+    }
+
+    array [1D] RingArc {
+        entry RingArc();
+        entry void passMsg(ForceMsg *m);
+        entry void recvParticles(vector<Particle> &ps);
+        entry void requestNextFrame(liveVizRequestMsg *m);
+        entry void startCycles();
+    }
+}
